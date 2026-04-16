@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Krupakar Dandem | Portfolio</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: rgba(255,255,255,0.08);
+      --panel-strong: rgba(255,255,255,0.12);
+      --text: #f5f7fb;
+      --muted: #c9d2e3;
+      --accent: #66e3ff;
+      --accent-2: #7c8cff;
+      --shadow: 0 20px 50px rgba(0,0,0,0.35);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(124,140,255,0.25), transparent 28%),
+        radial-gradient(circle at top right, rgba(102,227,255,0.18), transparent 30%),
+        linear-gradient(135deg, #08111f, #0f1731 55%, #0b1020 100%);
+      overflow-x: hidden;
+    }
+
+    .floating-bg span {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      animation: float 16s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes float {
+      from { transform: translateY(110vh) scale(0.8); opacity: 0; }
+      10% { opacity: 1; }
+      to { transform: translateY(-15vh) scale(1.4); opacity: 0; }
+    }
+
+    .container {
+      width: min(1150px, 92%);
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+      background: rgba(8, 13, 28, 0.55);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .nav-wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .brand span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.96rem;
+      transition: 0.25s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--accent);
+    }
+
+    header {
+      padding: 70px 0 30px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .hero-card,
+    .glass {
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .hero-card {
+      padding: 42px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      right: -70px;
+      top: -70px;
+      background: radial-gradient(circle, rgba(102,227,255,0.28), transparent 65%);
+      border-radius: 50%;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(102,227,255,0.12);
+      border: 1px solid rgba(102,227,255,0.3);
+      color: var(--accent);
+      font-size: 0.9rem;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      line-height: 1.05;
+      margin: 0 0 14px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #ffffff, #9eefff, #a9b3ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 13px 20px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: #07101e;
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(124,140,255,0.28);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .btn:hover { transform: translateY(-3px); }
+
+    .profile-panel {
+      padding: 30px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 28px;
+      display: grid;
+      place-items: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, rgba(102,227,255,0.22), rgba(124,140,255,0.3));
+      border: 1px solid rgba(255,255,255,0.16);
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,0.05);
+      border-radius: 18px;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .stat h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: var(--accent);
+    }
+
+    .stat p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    section {
+      padding: 34px 0;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .section-title p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+
+    .about-card, .timeline, .skill-box, .project-card, .contact-card {
+      padding: 26px;
+    }
+
+    .about-card p, .timeline p, .project-card p, .contact-card p {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 22px;
+      margin-bottom: 18px;
+      border-left: 2px solid rgba(102,227,255,0.24);
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      left: -7px;
+      top: 4px;
+      background: var(--accent);
+      box-shadow: 0 0 18px rgba(102,227,255,0.5);
+    }
+
+    .timeline-item h3 {
+      margin: 0 0 6px;
+      font-size: 1.06rem;
+    }
+
+    .timeline-item span {
+      color: var(--accent);
+      font-size: 0.92rem;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .skills-grid, .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .skill-box h3, .project-card h3, .contact-card h3 {
+      margin-top: 0;
+      margin-bottom: 12px;
+    }
+
+    .chip-wrap {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text);
+      font-size: 0.9rem;
+      transition: 0.2s ease;
+    }
+
+    .chip:hover {
+      transform: scale(1.04);
+      border-color: rgba(102,227,255,0.4);
+      color: var(--accent);
+    }
+
+    .project-card {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s ease, border-color 0.25s ease;
+      min-height: 240px;
+    }
+
+    .project-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(102,227,255,0.25);
+    }
+
+    .project-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -60px -80px auto;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,140,255,0.18), transparent 65%);
+    }
+
+    .mini-tag {
+      display: inline-block;
+      font-size: 0.82rem;
+      color: var(--accent);
+      margin-bottom: 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(102,227,255,0.1);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 22px;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .contact-item {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--muted);
+      word-break: break-word;
+    }
+
+    footer {
+      padding: 28px 0 46px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.92rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .typing {
+      color: var(--accent);
+      font-weight: 700;
+      min-height: 28px;
+      display: inline-block;
+    }
+
+    @media (max-width: 980px) {
+      .hero, .grid-2, .contact-grid, .skills-grid, .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-card, .profile-panel { padding: 26px; }
+      .section-title { align-items: start; flex-direction: column; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-wrap { flex-direction: column; gap: 12px; }
+      h1 { font-size: 2.3rem; }
+      .hero-card { padding: 22px; }
+      .profile-panel { padding: 20px; }
+      .stat-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-bg" aria-hidden="true">
+    <span style="left: 6%; animation-duration: 18s; animation-delay: 0s;"></span>
+    <span style="left: 18%; animation-duration: 13s; animation-delay: 3s;"></span>
+    <span style="left: 34%; animation-duration: 15s; animation-delay: 5s;"></span>
+    <span style="left: 56%; animation-duration: 17s; animation-delay: 2s;"></span>
+    <span style="left: 72%; animation-duration: 12s; animation-delay: 6s;"></span>
+    <span style="left: 88%; animation-duration: 16s; animation-delay: 1s;"></span>
+  </div>
+
+  <nav>
+    <div class="container nav-wrap">
+      <div class="brand">Krupakar<span>.</span>Portfolio</div>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="container">
+    <div class="hero">
+      <div class="hero-card reveal">
+        <div class="tag">Business Analytics Graduate Student</div>
+        <h1>Hello, I'm <span class="gradient-text">Krupakar Dandem</span></h1>
+        <div class="typing" id="typingText"></div>
+        <p>
+          I am a business analytics student with experience in customer support, reporting, and data-driven problem solving. I enjoy turning business questions into clear insights through dashboards, analysis, and simple storytelling.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#projects">View Projects</a>
+          <a class="btn btn-secondary" href="#contact">Contact Me</a>
+        </div>
+      </div>
+
+      <div class="glass profile-panel reveal">
+        <div class="avatar">KD</div>
+        <div>
+          <h2 style="margin:0 0 8px;">Profile Snapshot</h2>
+          <p style="margin:0; color:var(--muted); line-height:1.7;">
+            Based in Columbus, Ohio. Currently pursuing a master's in Business Analytics and building skills in analytics, reporting, visualization, and business decision support.
+          </p>
+        </div>
+        <div class="stat-grid">
+          <div class="stat">
+            <h3>1.5+ Years</h3>
+            <p>Professional experience at Tech Mahindra in customer support and operational reporting.</p>
+          </div>
+          <div class="stat">
+            <h3>Top Performer</h3>
+            <p>Recognized as the top associate in November 2023 for strong service performance.</p>
+          </div>
+          <div class="stat">
+            <h3>Master's Student</h3>
+            <p>Pursuing Business Analytics with a focus on practical business problem solving.</p>
+          </div>
+          <div class="stat">
+            <h3>Tools</h3>
+            <p>SQL, Tableau, Power BI, Excel, R, and Python for analysis and dashboards.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="about">
+      <div class="section-title reveal">
+        <h2>About Me</h2>
+        <p>A short introduction to who I am and what I do.</p>
+      </div>
+      <div class="grid-2">
+        <div class="glass about-card reveal">
+          <p>
+            I am KRUPAKAR DANDEM, a motivated and detail-oriented graduate student who enjoys solving business problems with data. My background includes customer support, queue management, reporting, and stakeholder communication. These experiences helped me build a strong foundation in multitasking, teamwork, and service excellence.
+          </p>
+          <p>
+            I am now growing my career in analytics by working on projects in Tableau, R, and business intelligence. My goal is to create useful dashboards, find trends in data, and support better decisions in business environments.
+          </p>
+        </div>
+        <div class="glass timeline reveal">
+          <div class="timeline-item">
+            <h3>Master of Science in Business Analytics</h3>
+            <span>Franklin University | 2024 - Present</span>
+            <p>Developing skills in analytics, visualization, predictive thinking, and business strategy.</p>
+          </div>
+          <div class="timeline-item">
+            <h3>Faculty Services Assistant</h3>
+            <span>Franklin University | 2025 - Present</span>
+            <p>Supporting academic operations, service tasks, and coordination responsibilities.</p>
+          </div>
+          <div class="timeline-item">
+            <h3>Technical Associate</h3>
+            <span>Tech Mahindra | 2023 - 2024</span>
+            <p>Handled customer issues, supported priority queues, reported operational updates, and maintained service quality.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience">
+      <div class="section-title reveal">
+        <h2>Experience Highlights</h2>
+        <p>What I bring from work and academic experience.</p>
+      </div>
+      <div class="skills-grid">
+        <div class="glass skill-box reveal">
+          <h3>Customer Support</h3>
+          <p>Worked directly with customers, handled multiple queues, and delivered strong communication during issue resolution.</p>
+        </div>
+        <div class="glass skill-box reveal">
+          <h3>Reporting & Analysis</h3>
+          <p>Supported reporting activities and operational tracking with a focus on clarity, performance, and service metrics.</p>
+        </div>
+        <div class="glass skill-box reveal">
+          <h3>Business Understanding</h3>
+          <p>Combining technical learning with business thinking to solve real-world problems in a practical way.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="section-title reveal">
+        <h2>Skills</h2>
+        <p>Core tools and strengths that support my portfolio.</p>
+      </div>
+      <div class="grid-2">
+        <div class="glass skill-box reveal">
+          <h3>Technical Skills</h3>
+          <div class="chip-wrap">
+            <div class="chip">HTML</div>
+            <div class="chip">CSS</div>
+            <div class="chip">JavaScript</div>
+            <div class="chip">SQL</div>
+            <div class="chip">Tableau</div>
+            <div class="chip">Power BI</div>
+            <div class="chip">Excel</div>
+            <div class="chip">R</div>
+            <div class="chip">Python</div>
+          </div>
+        </div>
+        <div class="glass skill-box reveal">
+          <h3>Professional Strengths</h3>
+          <div class="chip-wrap">
+            <div class="chip">Communication</div>
+            <div class="chip">Multitasking</div>
+            <div class="chip">Problem Solving</div>
+            <div class="chip">Reporting</div>
+            <div class="chip">Teamwork</div>
+            <div class="chip">Customer Service</div>
+            <div class="chip">Adaptability</div>
+            <div class="chip">Data Storytelling</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="section-title reveal">
+        <h2>Featured Projects</h2>
+        <p>Some of the topics and analytics work I have been building.</p>
+      </div>
+      <div class="projects-grid">
+        <div class="glass project-card reveal">
+          <div class="mini-tag">Tableau Project</div>
+          <h3>Telecom Churn Analysis</h3>
+          <p>Explored churn patterns using dashboards, contract comparisons, payment methods, and customer tenure insights to understand churn drivers.</p>
+        </div>
+        <div class="glass project-card reveal">
+          <div class="mini-tag">R Analysis</div>
+          <h3>Health Insurance Pricing</h3>
+          <p>Used regression analysis in R to study factors affecting insurance pricing such as age, BMI, smoking, and region.</p>
+        </div>
+        <div class="glass project-card reveal">
+          <div class="mini-tag">Healthcare Analytics</div>
+          <h3>Hospital Readmission Study</h3>
+          <p>Focused on readmission-related analytics to identify trends, improve understanding of risk factors, and support healthcare decision-making.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="section-title reveal">
+        <h2>Contact</h2>
+        <p>Let’s connect for opportunities, projects, or collaborations.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="glass contact-card reveal">
+          <h3>Let's Build Something Meaningful</h3>
+          <p>
+            I am actively building my portfolio and looking for opportunities in business analytics, data analysis, reporting, and related roles. I enjoy learning, improving, and creating work that shows both technical skills and business value.
+          </p>
+          <div class="contact-list">
+            <div class="contact-item"><strong>Email:</strong> dandemkrupakar@gmail.com</div>
+            <div class="contact-item"><strong>LinkedIn:</strong> linkedin.com/in/krupakardandem</div>
+            <div class="contact-item"><strong>Location:</strong> Columbus, Ohio</div>
+          </div>
+        </div>
+        <div class="glass contact-card reveal">
+          <h3>Quick Facts</h3>
+          <div class="contact-list">
+            <div class="contact-item">Interested in analytics, dashboards, and business problem solving.</div>
+            <div class="contact-item">Strong foundation in customer support and service operations.</div>
+            <div class="contact-item">Focused on building a professional and recruiter-friendly portfolio.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 Krupakar Dandem · Designed as a single-file interactive portfolio website.
+  </footer>
+
+  <script>
+    const text = [
+      'Aspiring Business Analyst',
+      'Data Storytelling Enthusiast',
+      'Dashboard & Insights Builder'
+    ];
+
+    let wordIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
+    const typingEl = document.getElementById('typingText');
+
+    function typeLoop() {
+      const current = text[wordIndex];
+      typingEl.textContent = deleting
+        ? current.slice(0, charIndex--)
+        : current.slice(0, charIndex++);
+
+      let speed = deleting ? 45 : 85;
+
+      if (!deleting && charIndex === current.length + 1) {
+        deleting = true;
+        speed = 1100;
+      } else if (deleting && charIndex < 0) {
+        deleting = false;
+        wordIndex = (wordIndex + 1) % text.length;
+        charIndex = 0;
+        speed = 300;
+      }
+
+      setTimeout(typeLoop, speed);
+    }
+    typeLoop();
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.14 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const top = window.scrollY;
+        const offset = section.offsetTop - 120;
+        const height = section.offsetHeight;
+        if (top >= offset && top < offset + height) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
