@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Krupakar Dandem — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0F172A;
+      --card:      #1E293B;
+      --border:    #334155;
+      --cyan:      #38BDF8;
+      --indigo:    #6366F1;
+      --text:      #E5E7EB;
+      --muted:     #94A3B8;
+      --glow-cyan: 0 0 20px rgba(56,189,248,.45), 0 0 60px rgba(56,189,248,.15);
+      --glow-indigo:0 0 20px rgba(99,102,241,.4), 0 0 60px rgba(99,102,241,.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── INTRO SPLASH ── */
+    #splash {
+      position: fixed; inset: 0;
+      background: var(--bg);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 9999;
+      transition: opacity .6s ease, visibility .6s ease;
+    }
+    #splash.hide { opacity: 0; visibility: hidden; }
+
+    .splash-name {
+      font-size: clamp(2rem, 7vw, 5rem);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      background: linear-gradient(135deg, var(--cyan), var(--indigo));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: nameIn .9s cubic-bezier(.22,1,.36,1) .3s forwards;
+    }
+    .splash-title {
+      margin-top: .6rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(.75rem, 2vw, 1rem);
+      color: var(--muted);
+      letter-spacing: .15em;
+      opacity: 0;
+      animation: nameIn .7s ease .9s forwards;
+    }
+    .splash-bar {
+      margin-top: 2.5rem;
+      width: 180px; height: 2px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .splash-bar-fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--cyan), var(--indigo));
+      animation: barFill 2.8s ease forwards;
+    }
+    @keyframes nameIn  { to { opacity:1; transform:translateY(0); } }
+    @keyframes barFill { to { width: 100%; } }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(15,23,42,.75);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-weight: 700; font-size: 1.1rem;
+      background: linear-gradient(135deg, var(--cyan), var(--indigo));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none; font-size: .9rem; font-weight: 500;
+      position: relative; transition: color .25s;
+    }
+    .nav-links a::after {
+      content:''; position:absolute; bottom:-3px; left:0; right:0; height:1px;
+      background: var(--cyan); transform: scaleX(0); transform-origin: left;
+      transition: transform .3s ease;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position:absolute; inset:0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 40%, rgba(56,189,248,.07) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 60%, rgba(99,102,241,.07) 0%, transparent 70%);
+      pointer-events:none;
+    }
+    .hero-grid {
+      position:absolute;inset:0;
+      background-image: linear-gradient(rgba(51,65,85,.25) 1px,transparent 1px),
+                        linear-gradient(90deg,rgba(51,65,85,.25) 1px,transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+      pointer-events:none;
+    }
+    .hero-content { position:relative; z-index:1; max-width:780px; }
+    .hero-tag {
+      display:inline-flex; align-items:center; gap:.5rem;
+      font-family:'JetBrains Mono',monospace; font-size:.8rem;
+      color:var(--cyan); border:1px solid rgba(56,189,248,.3);
+      padding:.35rem .9rem; border-radius:999px; margin-bottom:1.8rem;
+      background:rgba(56,189,248,.06);
+    }
+    .hero-tag span { width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.8)} }
+    .hero-name {
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      font-weight: 800; letter-spacing:-.03em;
+      background: linear-gradient(135deg, #fff 0%, var(--cyan) 50%, var(--indigo) 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+      line-height:1.1; margin-bottom:.8rem;
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--muted); margin-bottom:2.5rem; font-weight:400;
+    }
+    .hero-sub strong { color: var(--text); font-weight:600; }
+    .btn-group { display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; }
+    .btn {
+      padding:.75rem 2rem; border-radius:999px; font-size:.9rem;
+      font-weight:600; cursor:pointer; text-decoration:none;
+      transition: transform .25s, box-shadow .25s;
+      display:inline-flex; align-items:center; gap:.5rem;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--cyan), var(--indigo));
+      color:#fff; border:none;
+    }
+    .btn-primary:hover { transform:translateY(-2px) scale(1.03); box-shadow:var(--glow-cyan); }
+    .btn-outline {
+      background:transparent; color:var(--cyan);
+      border:1px solid rgba(56,189,248,.4);
+    }
+    .btn-outline:hover { transform:translateY(-2px); box-shadow:var(--glow-cyan); border-color:var(--cyan); }
+
+    /* ── SECTION BASE ── */
+    section { padding: 6rem 2rem; }
+    .container { max-width: 1050px; margin: 0 auto; }
+    .section-label {
+      font-family:'JetBrains Mono',monospace; font-size:.78rem;
+      color:var(--cyan); letter-spacing:.15em; text-transform:uppercase;
+      margin-bottom:.6rem;
+    }
+    .section-title {
+      font-size:clamp(1.6rem,4vw,2.2rem); font-weight:700;
+      margin-bottom:.5rem; color:var(--text);
+    }
+    .section-divider {
+      width:48px; height:3px;
+      background:linear-gradient(90deg,var(--cyan),var(--indigo));
+      border-radius:2px; margin-bottom:3rem;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: linear-gradient(180deg, var(--bg) 0%, #111827 100%); }
+    .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:start; }
+    .about-text { color:var(--muted); font-size:.95rem; }
+    .about-text p { margin-bottom:1rem; }
+    .about-text strong { color:var(--text); }
+    .about-card {
+      background:var(--card); border:1px solid var(--border);
+      border-radius:16px; padding:2rem;
+      box-shadow:0 4px 24px rgba(0,0,0,.3);
+    }
+    .about-card h3 { font-size:1rem; font-weight:600; color:var(--cyan); margin-bottom:1.2rem; }
+    .stat-row { display:flex; gap:2rem; margin-bottom:1.5rem; flex-wrap:wrap; }
+    .stat { text-align:center; }
+    .stat-num { font-size:2rem; font-weight:800; color:var(--cyan); line-height:1; }
+    .stat-lbl { font-size:.75rem; color:var(--muted); margin-top:.25rem; }
+    .info-row { display:flex; flex-direction:column; gap:.6rem; }
+    .info-item { display:flex; align-items:center; gap:.7rem; font-size:.85rem; color:var(--muted); }
+    .info-item .dot { width:6px;height:6px;border-radius:50%;background:var(--cyan);flex-shrink:0; }
+
+    /* ── SKILLS ── */
+    #skills { background:var(--bg); }
+    .skills-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; }
+    .skill-card {
+      background:var(--card); border:1px solid var(--border);
+      border-radius:16px; padding:1.75rem;
+      transition: transform .25s, border-color .25s, box-shadow .25s;
+    }
+    .skill-card:hover { transform:translateY(-4px); border-color:var(--cyan); box-shadow:0 8px 32px rgba(56,189,248,.12); }
+    .skill-card-icon { font-size:1.6rem; margin-bottom:.9rem; }
+    .skill-card h3 { font-size:.95rem; font-weight:600; color:var(--text); margin-bottom:1rem; }
+    .skill-tags { display:flex; flex-wrap:wrap; gap:.5rem; }
+    .tag {
+      font-family:'JetBrains Mono',monospace; font-size:.72rem;
+      color:var(--cyan); background:rgba(56,189,248,.08);
+      border:1px solid rgba(56,189,248,.2); border-radius:6px; padding:.25rem .6rem;
+    }
+    .tag.indigo { color:var(--indigo); background:rgba(99,102,241,.08); border-color:rgba(99,102,241,.2); }
+
+    /* ── EXPERIENCE ── */
+    #experience { background: linear-gradient(180deg, #111827 0%, var(--bg) 100%); }
+    .timeline { position:relative; padding-left:2rem; }
+    .timeline::before {
+      content:''; position:absolute; left:0; top:0; bottom:0; width:1px;
+      background:linear-gradient(180deg, var(--cyan), var(--indigo), transparent);
+    }
+    .tl-item { position:relative; margin-bottom:2.5rem; }
+    .tl-dot {
+      position:absolute; left:-2.38rem; top:.35rem;
+      width:14px; height:14px; border-radius:50%;
+      background:var(--bg); border:2px solid var(--cyan);
+      box-shadow: 0 0 10px rgba(56,189,248,.5);
+    }
+    .tl-card {
+      background:var(--card); border:1px solid var(--border);
+      border-radius:14px; padding:1.5rem 1.75rem;
+      transition: border-color .25s, box-shadow .25s;
+    }
+    .tl-card:hover { border-color:rgba(56,189,248,.4); box-shadow:0 4px 20px rgba(56,189,248,.08); }
+    .tl-meta {
+      display:flex; justify-content:space-between; flex-wrap:wrap;
+      gap:.5rem; margin-bottom:.6rem;
+    }
+    .tl-role { font-weight:700; font-size:1.05rem; color:var(--text); }
+    .tl-date {
+      font-family:'JetBrains Mono',monospace; font-size:.75rem;
+      color:var(--cyan); background:rgba(56,189,248,.08);
+      border:1px solid rgba(56,189,248,.2); border-radius:999px;
+      padding:.2rem .75rem; white-space:nowrap; align-self:flex-start;
+    }
+    .tl-company { color:var(--indigo); font-size:.88rem; font-weight:500; margin-bottom:.75rem; }
+    .tl-list { list-style:none; display:flex; flex-direction:column; gap:.5rem; }
+    .tl-list li { display:flex; gap:.75rem; font-size:.88rem; color:var(--muted); }
+    .tl-list li::before { content:'▸'; color:var(--cyan); flex-shrink:0; }
+
+    /* ── PROJECTS ── */
+    #projects { background:var(--bg); }
+    .projects-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem; }
+    .project-card {
+      background:var(--card); border:1px solid var(--border);
+      border-radius:16px; padding:2rem; position:relative; overflow:hidden;
+      transition: transform .25s, border-color .25s, box-shadow .25s;
+    }
+    .project-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background:linear-gradient(90deg, var(--cyan), var(--indigo));
+      transform:scaleX(0); transform-origin:left; transition:transform .35s;
+    }
+    .project-card:hover { transform:translateY(-5px); border-color:rgba(56,189,248,.35); box-shadow:0 12px 40px rgba(56,189,248,.1); }
+    .project-card:hover::before { transform:scaleX(1); }
+    .proj-icon { font-size:2rem; margin-bottom:1rem; }
+    .proj-title { font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:.6rem; }
+    .proj-desc { font-size:.87rem; color:var(--muted); }
+
+    /* ── EDUCATION ── */
+    #education { background:linear-gradient(180deg,#111827 0%,var(--bg) 100%); }
+    .edu-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; }
+    .edu-card {
+      background:var(--card); border:1px solid var(--border);
+      border-radius:16px; padding:1.75rem;
+      transition:border-color .25s, box-shadow .25s;
+    }
+    .edu-card:hover { border-color:rgba(99,102,241,.5); box-shadow:0 8px 32px rgba(99,102,241,.1); }
+    .edu-degree { font-size:1rem; font-weight:700; color:var(--text); margin-bottom:.3rem; }
+    .edu-school { color:var(--cyan); font-size:.88rem; font-weight:500; margin-bottom:.2rem; }
+    .edu-year {
+      font-family:'JetBrains Mono',monospace; font-size:.75rem;
+      color:var(--muted); margin-bottom:.8rem;
+    }
+
+    /* ── CONTACT ── */
+    #contact { background:var(--bg); text-align:center; }
+    .contact-box {
+      max-width:580px; margin:0 auto;
+      background:var(--card); border:1px solid var(--border);
+      border-radius:20px; padding:3rem 2.5rem;
+      box-shadow:0 4px 40px rgba(0,0,0,.3);
+    }
+    .contact-box p { color:var(--muted); margin-bottom:2rem; }
+    .contact-links { display:flex; flex-direction:column; gap:1rem; }
+    .contact-link {
+      display:flex; align-items:center; gap:1rem;
+      background:rgba(56,189,248,.05); border:1px solid rgba(56,189,248,.15);
+      border-radius:12px; padding:1rem 1.25rem;
+      text-decoration:none; color:var(--text);
+      transition: background .25s, border-color .25s, transform .25s;
+    }
+    .contact-link:hover { background:rgba(56,189,248,.1); border-color:var(--cyan); transform:translateX(4px); }
+    .contact-link .cl-icon { font-size:1.1rem; width:1.5rem; text-align:center; color:var(--cyan); }
+    .contact-link .cl-text { font-size:.88rem; }
+    .contact-link .cl-label { font-size:.72rem; color:var(--muted); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top:1px solid var(--border); padding:2rem;
+      text-align:center; color:var(--muted); font-size:.8rem;
+      font-family:'JetBrains Mono',monospace;
+    }
+    footer span { color:var(--cyan); }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity:0; transform:translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:768px) {
+      .about-grid { grid-template-columns:1fr; }
+      .nav-links { display:none; }
+      .stat-row { justify-content:center; }
+      .tl-meta { flex-direction:column; }
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width:5px; }
+    ::-webkit-scrollbar-track { background:var(--bg); }
+    ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+    ::-webkit-scrollbar-thumb:hover { background:var(--cyan); }
+  </style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-name">Krupakar Dandem</div>
+  <div class="splash-title">Business Analytics · Data &amp; Operations</div>
+  <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">KD.portfolio</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-tag"><span></span> Open to Opportunities</div>
+    <h1 class="hero-name">Krupakar Dandem</h1>
+    <p class="hero-sub">
+      <strong>Business Analytics Graduate</strong> · Data Analysis · Operations &amp; Process Improvement
+    </p>
+    <div class="btn-group">
+      <a class="btn btn-primary" href="#experience">View Experience</a>
+      <a class="btn btn-outline" href="#contact">Get In Touch</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="section-label">01 / About</div>
+    <h2 class="section-title">Who I Am</h2>
+    <div class="section-divider"></div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>Results-driven <strong>Business Analytics graduate student</strong> with <strong>3 years of experience</strong> in operations, data analysis, and process improvement.</p>
+        <p>Proven ability to analyze data, optimize workflows, and support business decision-making in fast-paced environments. Skilled in stakeholder coordination, reporting, and performance tracking, with strong attention to detail and problem-solving abilities.</p>
+        <p>Seeking opportunities in <strong>management and analyst roles</strong> to drive operational efficiency and business impact.</p>
+      </div>
+      <div class="about-card reveal">
+        <h3>At a Glance</h3>
+        <div class="stat-row">
+          <div class="stat"><div class="stat-num">3+</div><div class="stat-lbl">Years Exp.</div></div>
+          <div class="stat"><div class="stat-num">15%</div><div class="stat-lbl">Efficiency Gains</div></div>
+          <div class="stat"><div class="stat-num">20%</div><div class="stat-lbl">Faster Resolution</div></div>
+        </div>
+        <div class="info-row">
+          <div class="info-item"><span class="dot"></span> Columbus, OH</div>
+          <div class="info-item"><span class="dot"></span> dandemkrupakar@gmail.com</div>
+          <div class="info-item"><span class="dot"></span> +1 614-787-8469</div>
+          <div class="info-item"><span class="dot"></span> MS Business Analytics — Franklin University</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <div class="section-label">02 / Skills</div>
+    <h2 class="section-title">Technical Arsenal</h2>
+    <div class="section-divider"></div>
+    <div class="skills-grid">
+      <div class="skill-card reveal">
+        <div class="skill-card-icon">⚙️</div>
+        <h3>Tools &amp; Platforms</h3>
+        <div class="skill-tags">
+          <span class="tag">Python</span>
+          <span class="tag">SQL</span>
+          <span class="tag">Excel (Advanced)</span>
+          <span class="tag">Power BI</span>
+          <span class="tag">Tableau</span>
+          <span class="tag">R</span>
+          <span class="tag">ServiceNow</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-card-icon">📊</div>
+        <h3>Analytical Techniques</h3>
+        <div class="skill-tags">
+          <span class="tag indigo">Data Visualization</span>
+          <span class="tag indigo">Regression Analysis</span>
+          <span class="tag indigo">Predictive Modeling</span>
+          <span class="tag indigo">Data Cleaning</span>
+          <span class="tag indigo">Statistical Analysis</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-card-icon">🏢</div>
+        <h3>Business Domains</h3>
+        <div class="skill-tags">
+          <span class="tag">Operations Analytics</span>
+          <span class="tag">Process Improvement</span>
+          <span class="tag">KPI Tracking</span>
+          <span class="tag">SLA Monitoring</span>
+          <span class="tag">Supply Chain</span>
+          <span class="tag">Financial Analysis</span>
+          <span class="tag">Stakeholder Mgmt</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <div class="section-label">03 / Experience</div>
+    <h2 class="section-title">Work History</h2>
+    <div class="section-divider"></div>
+    <div class="timeline">
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-role">Faculty Services Student Assistant</span>
+            <span class="tl-date">Jan 2025 – Present</span>
+          </div>
+          <div class="tl-company">Franklin University · Columbus, OH</div>
+          <ul class="tl-list">
+            <li>Analyzed administrative workflows and service requests to improve process efficiency, reducing turnaround time by 15%.</li>
+            <li>Developed Excel-based reports to track request trends, identify bottlenecks, and support data-driven decision-making.</li>
+            <li>Coordinated with faculty and departments to ensure timely completion of requests and improve service delivery.</li>
+            <li>Maintained accurate records and documentation in audit-ready format to support compliance and reporting needs.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-role">Technical Associate</span>
+            <span class="tl-date">Mar 2023 – Aug 2024</span>
+          </div>
+          <div class="tl-company">Tech Mahindra</div>
+          <ul class="tl-list">
+            <li>Managed high-volume service operations while analyzing performance metrics to improve efficiency and SLA compliance.</li>
+            <li>Created dashboards and reports that improved issue resolution by 15% and enhanced operational visibility.</li>
+            <li>Identified root causes of recurring issues and implemented solutions, reducing resolution time by 20%.</li>
+            <li>Collaborated with cross-functional teams to improve workflows and deliver consistent customer service performance.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-meta">
+            <span class="tl-role">Junior Engineer Intern</span>
+            <span class="tl-date">Mar 2021 – Aug 2021</span>
+          </div>
+          <div class="tl-company">GK Raj Construction</div>
+          <ul class="tl-list">
+            <li>Assisted in project planning, cost estimation, and material tracking to support efficient construction operations.</li>
+            <li>Coordinated with stakeholders and suppliers to ensure timely availability of materials and reduce delays.</li>
+            <li>Prepared technical documentation and reports to support project monitoring and execution.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <div class="section-label">04 / Projects</div>
+    <h2 class="section-title">Featured Work</h2>
+    <div class="section-divider"></div>
+    <div class="projects-grid">
+      <div class="project-card reveal">
+        <div class="proj-icon">🏥</div>
+        <div class="proj-title">Healthcare Cost Prediction &amp; Analysis</div>
+        <p class="proj-desc">Built regression models in R to identify key factors influencing insurance pricing and cost variability. Applied statistical analysis techniques to uncover actionable insights from healthcare datasets.</p>
+        <div class="skill-tags" style="margin-top:1.2rem;">
+          <span class="tag">R</span>
+          <span class="tag">Regression</span>
+          <span class="tag indigo">Predictive Modeling</span>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="proj-icon">📡</div>
+        <div class="proj-title">Telecom Customer Churn Analysis</div>
+        <p class="proj-desc">Designed Tableau dashboards to analyze churn patterns and identify key drivers influencing customer retention. Translated complex data trends into clear visual narratives for decision-makers.</p>
+        <div class="skill-tags" style="margin-top:1.2rem;">
+          <span class="tag">Tableau</span>
+          <span class="tag indigo">Data Visualization</span>
+          <span class="tag">Churn Analysis</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="container">
+    <div class="section-label">05 / Education</div>
+    <h2 class="section-title">Academic Background</h2>
+    <div class="section-divider"></div>
+    <div class="edu-grid">
+      <div class="edu-card reveal">
+        <div class="edu-degree">Master of Science in Business Analytics</div>
+        <div class="edu-school">Franklin University, Columbus, OH</div>
+        <div class="edu-year">2024 – Present</div>
+        <div class="skill-tags">
+          <span class="tag">Business Analytics</span>
+          <span class="tag indigo">Data Science</span>
+        </div>
+      </div>
+      <div class="edu-card reveal">
+        <div class="edu-degree">Bachelor of Technology in Civil Engineering</div>
+        <div class="edu-school">Jawaharlal Nehru Technological University, Hyderabad</div>
+        <div class="edu-year">Graduated 2022</div>
+        <div class="skill-tags">
+          <span class="tag">Engineering</span>
+          <span class="tag indigo">Project Mgmt</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="section-label">06 / Contact</div>
+    <h2 class="section-title">Get In Touch</h2>
+    <div class="section-divider" style="margin:0 auto 3rem;"></div>
+    <div class="contact-box reveal">
+      <p>I'm currently seeking opportunities in management and analyst roles. Feel free to reach out — I'd love to connect!</p>
+      <div class="contact-links">
+        <a class="contact-link" href="mailto:dandemkrupakar@gmail.com">
+          <span class="cl-icon">✉️</span>
+          <div>
+            <div class="cl-text">dandemkrupakar@gmail.com</div>
+            <div class="cl-label">Email</div>
+          </div>
+        </a>
+        <a class="contact-link" href="tel:+16147878469">
+          <span class="cl-icon">📞</span>
+          <div>
+            <div class="cl-text">+1 614-787-8469</div>
+            <div class="cl-label">Phone</div>
+          </div>
+        </a>
+        <a class="contact-link" href="https://linkedin.com" target="_blank" rel="noopener">
+          <span class="cl-icon">🔗</span>
+          <div>
+            <div class="cl-text">LinkedIn Profile</div>
+            <div class="cl-label">LinkedIn</div>
+          </div>
+        </a>
+        <div class="contact-link" style="cursor:default;">
+          <span class="cl-icon">📍</span>
+          <div>
+            <div class="cl-text">Columbus, OH</div>
+            <div class="cl-label">Location</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  Designed &amp; Built by <span>Krupakar Dandem</span> · 2025
+</footer>
+
+<script>
+  // ── Splash: hide after 3 s ──
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('splash').classList.add('hide');
+    }, 3000);
+  });
+
+  // ── Scroll reveal ──
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        // stagger siblings
+        const siblings = [...e.target.parentElement.querySelectorAll('.reveal')];
+        const delay = siblings.indexOf(e.target) * 100;
+        setTimeout(() => e.target.classList.add('visible'), delay);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => io.observe(r));
+</script>
+</body>
+</html>
